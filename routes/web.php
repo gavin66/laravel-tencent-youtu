@@ -10,15 +10,11 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+header("Access-Control-Allow-Origin: *");
 
 Route::get('/', function () {
     return view('welcome');
 });
-
-//public static $APPID = '10116676';
-//public static $SECRET_ID = 'AKIDvjrvtkezKSRJzTM11pQoALNDrIagjPxJ';
-//public static $SECRET_KEY = 'rZSDalkW6XL3lKl02ObfYFj5FH7kDZIq';
-// QQ 896993802
 
 Route::post('/pitu',function (){
     $image_base64 = \Illuminate\Support\Facades\Request::input('img_base64','');
