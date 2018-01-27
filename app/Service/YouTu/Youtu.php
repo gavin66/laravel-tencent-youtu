@@ -85,7 +85,6 @@ class YouTu
     {
 
         $real_image_path = realpath($image_path);
-
         if ( !file_exists($real_image_path) ) {
             return [ 'httpcode' => 0, 'code' => self::HTTP_BAD_REQUEST, 'message' => 'file ' . $image_path . ' not exists', 'data' => [] ];
         }
@@ -2052,6 +2051,50 @@ class YouTu
         ];
 
         $rsp = Http::send($req);
+        $ret = json_decode($rsp, true);
+
+        if ( !$ret ) {
+            return self::getStatusText();
+        }
+
+        return $ret;
+    }
+
+    /**
+     * @brief detectFaceByBase64
+     *
+     * @param image_base64 待检测的路径
+     * @param isbigface 是否大脸模式 ０表示检测所有人脸， 1表示只检测照片最大人脸　适合单人照模式
+     *
+     * @return 返回的结果，JSON字符串，字段参见API文档
+     */
+    public static function detectFaceByBase64( $image_base64, $isBigFace )
+    {
+        $expired = time() + self::EXPIRED_SECONDS;
+        $postUrl = Conf::$END_POINT . 'youtu/api/detectface';
+        $sign = Auth::appSign($expired, Conf::$USER_ID);
+
+        $post_data = [
+            'app_id' => Conf::$APPID,
+            'image'  => $image_base64,
+//            'url'  => 'https://youtu.qq.com/app/img/experience/face_img/icon_face_01.jpg',
+            'mode'   => $isBigFace
+        ];
+
+        $req = [
+            'url'     => $postUrl,
+            'method'  => 'post',
+            'timeout' => 10,
+            'data'    => json_encode($post_data),
+            'header'  => [
+                'Authorization:' . $sign,
+                'Content-Type:text/json',
+                'Expect: ',
+            ],
+        ];
+
+        $rsp = Http::send($req);
+
         $ret = json_decode($rsp, true);
 
         if ( !$ret ) {
