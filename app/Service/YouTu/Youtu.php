@@ -111,6 +111,7 @@ class YouTu
                 'Expect: ',
             ],
         ];
+
         $rsp = Http::send($req);
 
         $ret = json_decode($rsp, true);
@@ -2077,7 +2078,6 @@ class YouTu
         $post_data = [
             'app_id' => Conf::$APPID,
             'image'  => $image_base64,
-//            'url'  => 'https://youtu.qq.com/app/img/experience/face_img/icon_face_01.jpg',
             'mode'   => $isBigFace
         ];
 
@@ -2094,7 +2094,6 @@ class YouTu
         ];
 
         $rsp = Http::send($req);
-
         $ret = json_decode($rsp, true);
 
         if ( !$ret ) {
